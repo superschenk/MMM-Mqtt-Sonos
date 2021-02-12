@@ -1,0 +1,28 @@
+<div>
+{% if loading %}
+
+  <div class="dimmed light small">{{ phrases.loading | safe }}</div>
+
+{% else %}
+
+  {% if playbackState == "PLAYING" and type == "radio" %}
+    <div class="light small">
+        <img src='{{ absoluteAlbumArtUri }}' alt='Album' width='100' height='100' /><br />
+        {% set regExp = r/^x-sonos*/g %}
+        {% if not regExp.test(title) %}
+        {{ title | replace(" - ", "<br/>") | replace(" ", "&nbsp;") | safe }}
+        {% endif %}
+    </div>
+  {% elif playbackState == "PLAYING" and type == "track" %}
+    <div class="light small">
+      <img src='{{ absoluteAlbumArtUri }}' alt='Album' width='125' height='125' /><br />
+      <span class='bright medium'>{{ artist | replace(" ", "&nbsp;") | safe }}</span><br />
+      {{ title | replace(" ", "&nbsp;") | safe }}
+    </div>
+  {% elif playbackState == "PLAYING" and type == "line_in" %}
+    <!-- <div class="dimmed light small">📺</div> -->
+  {% else %}
+    <!-- <div class="dimmed light small">niet afspelen</div> -->
+  {% endif %}
+{% endif %}
+</div>

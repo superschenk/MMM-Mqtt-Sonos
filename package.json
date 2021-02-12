@@ -1,0 +1,23 @@
+{
+	"name": "MMM-Mqtt-Sonos",
+	"version": "0.1",
+	"description": "Sonos MQTT for MagicMirror",
+	"main": "MMM-Mqtt-Sonos.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/superschenk/MMM-Mqtt-Sonos.git"
+	},
+	"keywords": [
+		"MagicMirror",
+		"mqtt",
+		"Sonos"
+	],
+	"author": "Tim Schenk",
+	"homepage": "https://github.com/superschenk/MMM-Mqtt-Sonos#readme",
+	"dependencies": {
+		"mqtt": "^1.14.1"
+	}
+}
