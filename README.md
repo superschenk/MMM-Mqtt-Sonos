@@ -26,7 +26,7 @@ modules: [
 |---|---|
 | `mqttServer`  | Connection string for the server to connect to (`mqtt://localhost`)  |
 | `loadingText`  | Text to display while waiting for data to load  |
-| `topic`  | MQTT Topic to subscribe to on the server (`alexa/mmm/display`)  |
+| `topic`  | MQTT Topic to subscribe to on the server (`Smederij/sonos`)  |
 
 
 ## Dependencies
@@ -34,6 +34,9 @@ modules: [
 
 ## Credits
 Big thanks to:
+
 [MichMich](https://magicmirror.builders) for creating MagicMirror.
+
 [plangdon](https://github.com/plangdon/MMM-mqtt_display) for information on using MQTT in Node and MagicMirror.
+
 [Jeff Clarke](https://github.com/jclarke0000/MMM-DarkSkyForecast) for information on getting templates to work with MagicMirror.
