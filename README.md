@@ -30,6 +30,8 @@ modules: [
 
 
 ## Dependencies
+`sudo apt install mosquitto-clients` mqtt client
+
 - [mqtt](https://www.npmjs.com/package/mqtt) (installed via `npm install`)
 
 ## Credits
