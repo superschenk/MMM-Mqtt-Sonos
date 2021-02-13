@@ -11,19 +11,18 @@ Module.register('MMM-Mqtt-Sonos', {
 
   defaults: {
     mqttServer: 'mqtt://',
-    loadingText: 'Sonos wordt geladen....',
     topic: '',
   },
 
   start: function() {
     Log.info('Starting module: ' + this.name);
-    this.loading = true;
     this.mqttVal = null;
     this.jsonMQTT = null;
     this.currentset = null;
 
     var self = this;
     self.sendSocketNotification('MQTT_SERVER', { mqttServer: self.config.mqttServer, topic: self.config.topic });
+    this.updateDom();
   },
 
   getTemplate: function () {
@@ -32,10 +31,6 @@ Module.register('MMM-Mqtt-Sonos', {
 
   getTemplateData: function () {
     return {
-      phrases: {
-        loading: this.config.loadingText
-      },
-      loading:              this.loading,
       config:               this.config,
       playbackState:        this.currentset == null ? null : this.currentset[0]['playbackState'],
       absoluteAlbumArtUri:  this.currentset == null ? null : this.currentset[0]['absoluteAlbumArtUri'],
@@ -47,24 +42,19 @@ Module.register('MMM-Mqtt-Sonos', {
 
   socketNotificationReceived: function(notification, payload) {
     if (notification === 'MQTT_DATA' && payload.topic === this.config.topic && this.mqttVal != payload.data.toString()) {
-      if (this.loading) {
-        this.loading = false;
-        this.updateDom();
-      } else {
-        this.mqttVal = payload.data.toString();
-        this.jsonMQTT = JSON.parse(this.mqttVal.toString())
-        var newset =      [{
-                              "playbackState":        this.jsonMQTT.playbackState
-                            , "absoluteAlbumArtUri":  this.jsonMQTT.currentTrack.absoluteAlbumArtUri
-                            , "title":                this.jsonMQTT.currentTrack.title
-                            , "artist":               this.jsonMQTT.currentTrack.artist
-                            , "type":                 this.jsonMQTT.currentTrack.type
-                          }]
+      this.mqttVal = payload.data.toString();
+      this.jsonMQTT = JSON.parse(this.mqttVal.toString())
+      var newset =      [{
+                            "playbackState":        this.jsonMQTT.playbackState
+                          , "absoluteAlbumArtUri":  this.jsonMQTT.currentTrack.absoluteAlbumArtUri
+                          , "title":                this.jsonMQTT.currentTrack.title
+                          , "artist":               this.jsonMQTT.currentTrack.artist
+                          , "type":                 this.jsonMQTT.currentTrack.type
+                        }]
 
-        if (JSON.stringify(newset) !== JSON.stringify(this.currentset)) { // change detected
-          this.currentset = newset // update current set
-          this.updateDom();
-        }
+      if (JSON.stringify(newset) !== JSON.stringify(this.currentset)) { // change detected
+        this.currentset = newset // update current set
+        this.updateDom(10000);
       }
     }
 

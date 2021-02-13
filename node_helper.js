@@ -1,11 +1,5 @@
 'use strict';
 
-/* Magic Mirror
- * Module: MMM-Mqtt-Sonos
- *
- * By Tim Schenk
- */
-
 const NodeHelper = require('node_helper');
 var mqtt = require('mqtt');
 
@@ -30,17 +24,6 @@ module.exports = NodeHelper.create({
         message: 'MQTTgenerated an error: ' + error
       });
     });
-    /*
-    client.on('offline', function() {
-      console.log('*** MQTT Client Offline ***');
-      self.sendSocketNotification('ERROR', {
-        type: 'notification',
-        title: 'MQTT Offline',
-        message: 'MQTT Server is offline.'
-      });
-      client.end();
-    });
-    */
 
     client.on('message', function(topic, message) {
       self.sendSocketNotification('MQTT_DATA', {'topic':topic, 'data':message.toString()});
