@@ -30,7 +30,7 @@ module.exports = NodeHelper.create({
         message: 'MQTTgenerated an error: ' + error
       });
     });
-
+    /*
     client.on('offline', function() {
       console.log('*** MQTT Client Offline ***');
       self.sendSocketNotification('ERROR', {
@@ -40,6 +40,7 @@ module.exports = NodeHelper.create({
       });
       client.end();
     });
+    */
 
     client.on('message', function(topic, message) {
       self.sendSocketNotification('MQTT_DATA', {'topic':topic, 'data':message.toString()});
