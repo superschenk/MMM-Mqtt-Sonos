@@ -31,7 +31,7 @@ module.exports = NodeHelper.create({
   },
 
   socketNotificationReceived: function(notification, payload) {
-    if (notification === 'MQTT_SERVER') {
+    if (notification === 'MQTT_SERVER' && payload.useownserver) {
       this.getMqtt(payload);
     }
   }

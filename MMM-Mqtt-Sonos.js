@@ -40,22 +40,32 @@ Module.register('MMM-Mqtt-Sonos', {
     };
   },
 
+  MQTTnotificationReceived: function(payload) {
+    this.mqttVal = payload.data.toString();
+    this.jsonMQTT = JSON.parse(this.mqttVal.toString())
+    var newset =      [{
+                          "playbackState":        this.jsonMQTT.playbackState
+                        , "absoluteAlbumArtUri":  this.jsonMQTT.currentTrack.absoluteAlbumArtUri
+                        , "title":                this.jsonMQTT.currentTrack.title
+                        , "artist":               this.jsonMQTT.currentTrack.artist
+                        , "type":                 this.jsonMQTT.currentTrack.type
+                      }]
+
+    if (JSON.stringify(newset) !== JSON.stringify(this.currentset)) { // change detected
+      this.currentset = newset // update current set
+      this.updateDom(10000);
+    }
+  },
+
+  notificationReceived: function (notification, payload, sender) {
+    if (notification === 'MQTT_DATA' && payload.topic === this.config.topic && this.mqttVal != payload.data.toString()) {
+      this.MQTTnotificationReceived(payload);
+    }
+  },
+
   socketNotificationReceived: function(notification, payload) {
     if (notification === 'MQTT_DATA' && payload.topic === this.config.topic && this.mqttVal != payload.data.toString()) {
-      this.mqttVal = payload.data.toString();
-      this.jsonMQTT = JSON.parse(this.mqttVal.toString())
-      var newset =      [{
-                            "playbackState":        this.jsonMQTT.playbackState
-                          , "absoluteAlbumArtUri":  this.jsonMQTT.currentTrack.absoluteAlbumArtUri
-                          , "title":                this.jsonMQTT.currentTrack.title
-                          , "artist":               this.jsonMQTT.currentTrack.artist
-                          , "type":                 this.jsonMQTT.currentTrack.type
-                        }]
-
-      if (JSON.stringify(newset) !== JSON.stringify(this.currentset)) { // change detected
-        this.currentset = newset // update current set
-        this.updateDom(10000);
-      }
+      this.MQTTnotificationReceived(payload);
     }
 
     if (notification === 'ERROR') {
